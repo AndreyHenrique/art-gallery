@@ -11,9 +11,13 @@ public class RepositorioObra implements IRepositorioObra {
 
     @Override
     public void cadastrar(Obra obra) {
-        Obra obraEncontrada = this.buscar(obra.getTitulo());
-
-        if (obraEncontrada != null) throw new ObraJaCadastradaException();
+        for (Obra o : this.obras) {
+            // Valida se o título e o autor são iguais
+            if (o.getTitulo().equalsIgnoreCase(obra.getTitulo()) &&
+                    o.getAutor().equalsIgnoreCase(obra.getAutor())) {
+                throw new ObraJaCadastradaException("Já existe uma obra com este título para este autor.");
+            }
+        }
         this.obras.add(obra);
     }
 
