@@ -90,6 +90,36 @@ public class TesteBackend {
         }
 
         // ==========================================
+        // TESTE 4.5: Gerenciamento de Exposições
+        // ==========================================
+        System.out.print("Teste 4.5: Criando exposição e testando polimorfismo... ");
+        try {
+            // 1. Criamos e cadastramos a exposição através do repositório correspondente
+            Exposicao expo = new Exposicao("Vanguardas Digitais");
+            repoExpo.cadastrar(expo);
+
+            // 2. Recuperamos duas obras de tipos diferentes (Pintura e Modelagem)
+            Obra obra1 = repoObra.buscar("Aurora Neon");
+            Obra obra2 = repoObra.buscar("Cyber Dragon");
+
+            // 3. Adicionamos tipos diferentes no mesmo Vector<Obra> interno da exposição
+            expo.adicionarObra(obra1);
+            expo.adicionarObra(obra2);
+
+            // 4. Testamos a consulta de obras expostas via service
+            Vector<Obra> obrasDaExpo = sistema.obrasExpostas("Vanguardas Digitais");
+            Vector<Obra> expoInexistente = sistema.obrasExpostas("Exposição Fantasma");
+
+            if (obrasDaExpo.size() == 2 && expoInexistente.isEmpty()) {
+                System.out.println("OK! (Obras vinculadas e listadas com sucesso)");
+            } else {
+                System.out.println("FALHOU (Erro na contagem ou na validação de inexistência)");
+            }
+        } catch (Exception e) {
+            System.out.println("FALHOU com erro inesperado: " + e.getMessage());
+        }
+
+        // ==========================================
         // TESTE 5: Impressão com Detalhes e Avaliações
         // ==========================================
         System.out.println("\n=== TESTE 5: Demonstração de Late Binding e Exibição de Avaliações ===");
@@ -109,11 +139,6 @@ public class TesteBackend {
         System.out.println("\n=== FIM DOS TESTES ===");
     }
 
-    /**
-     * Método auxiliar de teste para exibir textualmente as avaliações de uma obra.
-     * Como o vetor de avaliações é privado na classe Obra, para rodar este teste perfeitamente,
-     * certifique-se de ter criado um método "public Vector<Avaliacao> getAvaliacoes()" na sua classe Obra.
-     */
     private static void exibirAvaliacoesDaObra(Obra obra) {
         System.out.println(">> Comentários dos Usuários:");
 

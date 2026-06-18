@@ -22,13 +22,17 @@ public class RepositorioObra implements IRepositorioObra {
         Obra  obraEncontrada = this.buscar(obra.getTitulo());
 
         // Se a obra não existe
-        if (obraEncontrada == null) throw new ObraNaoEncontradaException();
+        if (obraEncontrada == null) {
+            throw new ObraNaoEncontradaException("A obra '" + obra.getTitulo() + "' não existe.");
+        }
 
         // Se a obra existe, mas não está ativa
-        if (!obraEncontrada.isAtiva()) throw new ObraNaoEncontradaException("A obra '" + obra.getTitulo() + "' já se encontra desativada.");
+        if (!obraEncontrada.isAtiva()) {
+            throw new ObraNaoEncontradaException("A obra '" + obra.getTitulo() + "' já se encontra desativada.");
+        }
 
         // Pega o indice e atualiza em obras com o indice
-        int indice =  this.obras.indexOf(obra);
+        int indice =  this.obras.indexOf(obraEncontrada);
         this.obras.set(indice, obra);
     }
 
